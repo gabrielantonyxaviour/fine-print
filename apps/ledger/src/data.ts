@@ -53,13 +53,14 @@ async function fetchText(url: string): Promise<string | undefined> {
 }
 
 // Loads the policy once and the ledger repeatedly in live mode, so verdicts flip on screen.
-export function useLedger(): LoadState {
+export function useLedger(which: 'before' | 'after' = 'after'): LoadState {
   const [state, setState] = useState<LoadState>({});
   useEffect(() => {
     let stopped = false;
     const load = async () => {
       try {
-        const [policy, ledgerText] = await Promise.all([fetchText(`${base}/policy.md`), fetchText(`${base}/ledger.json`)]);
+        const ledgerUrl = LIVE ? `${base}/ledger.json` : `${base}/ledger-${which}.json`;
+        const [policy, ledgerText] = await Promise.all([fetchText(`${base}/policy.md`), fetchText(ledgerUrl)]);
         if (stopped) return;
         if (!policy) { setState({ error: `No policy found for "${TARGET}".` }); return; }
         let ledger: Ledger | undefined;
@@ -74,7 +75,7 @@ export function useLedger(): LoadState {
     void load();
     const timer = LIVE ? window.setInterval(load, 1000) : undefined;
     return () => { stopped = true; if (timer) window.clearInterval(timer); };
-  }, []);
+  }, [which]);
   return state;
 }
 

@@ -12,7 +12,9 @@ interface Props {
 export function Policy({ markdown, entries, filter, onOpen }: Props) {
   const byQuote = entries.map((e) => ({ entry: e, key: normalize(e.quote) }));
   const highlight = (text: string): ReactNode => {
-    const hit = byQuote.find(({ key }) => normalize(text).includes(key));
+    const t = normalize(text);
+    // A promise quote may span several paragraphs, so a paragraph inside the quote also counts.
+    const hit = byQuote.find(({ key }) => t.includes(key) || (t.length > 24 && key.includes(t)));
     if (!hit) return text;
     const { entry } = hit;
     const dim = filter !== 'all' && entry.verdict !== filter;
@@ -53,5 +55,5 @@ export function Policy({ markdown, entries, filter, onOpen }: Props) {
 // Quotes Fine Print extracted that do not appear verbatim in the document are listed, never dropped.
 export function unmatched(markdown: string, entries: LedgerEntry[]): LedgerEntry[] {
   const doc = normalize(markdown);
-  return entries.filter((e) => !doc.includes(normalize(e.quote)));
+  return entries.filter((e) => !doc.includes(normalize(e.quote)) && !normalize(e.quote).split(/(?<=[.;]) /).every((part) => doc.includes(part.replace(/[.\s]+$/, ''))));
 }

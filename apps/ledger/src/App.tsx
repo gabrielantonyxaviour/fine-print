@@ -6,7 +6,8 @@ import { Policy, unmatched } from './Policy.tsx';
 const ORDER: Verdict[] = ['broken', 'kept', 'needs_review', 'couldnt_check', 'pending'];
 
 export function App() {
-  const { policy, ledger, error } = useLedger();
+  const [which, setWhich] = useState<'before' | 'after'>(new URLSearchParams(window.location.search).get('state') === 'after' ? 'after' : 'before');
+  const { policy, ledger, error } = useLedger(which);
   const [open, setOpen] = useState<LedgerEntry | undefined>();
   const [filter, setFilter] = useState<string>('all');
   const close = useCallback(() => setOpen(undefined), []);
@@ -18,7 +19,13 @@ export function App() {
   return (
     <div className="shell">
       <header className="top">
-        <div className="brand"><span className="mark">¶</span> Fine Print</div>
+        <a className="brand" href="/"><span className="mark">¶</span> Fine Print</a>
+        {!LIVE && (
+          <div className="seg" role="tablist" aria-label="Which run">
+            <button type="button" role="tab" aria-selected={which === 'before'} className={which === 'before' ? 'on' : ''} onClick={() => setWhich('before')}>Bob's audit · before fix</button>
+            <button type="button" role="tab" aria-selected={which === 'after'} className={which === 'after' ? 'on' : ''} onClick={() => setWhich('after')}>After Bob's fix</button>
+          </div>
+        )}
         <div className="meta">
           {ledger ? (
             <>
