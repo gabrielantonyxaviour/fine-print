@@ -3,7 +3,6 @@ import { useEffect, useRef, useState } from 'react';
 import { CASES } from './cases.ts';
 import { Flow } from './Flow.tsx';
 import { Guard } from './Guard.tsx';
-import { HeroDoc } from './HeroDoc.tsx';
 import { Nav } from './Nav.tsx';
 
 const REPO = 'https://github.com/gabrielantonyxaviour/fine-print';
@@ -30,16 +29,26 @@ export function Landing() {
         <div className="hero-glow" />
         <div className="hero-copy">
           <motion.p className="eyebrow" {...up}>Built with <span className="ibm">IBM Bob</span></motion.p>
-          <motion.h1 {...up} transition={{ delay: 0.05 }}>Your privacy policy, <em>fact-checked</em> against your code.</motion.h1>
+          <motion.h1 {...up} transition={{ delay: 0.05 }}>Your privacy policy, <span className="hl">fact-checked</span> against your code.</motion.h1>
           <motion.p className="lede" {...up} transition={{ delay: 0.12 }}>Fine Print turns every promise in your policy into a proof that runs, then keeps your code honest on every commit.</motion.p>
           <motion.div className="ctas" {...up} transition={{ delay: 0.2 }}>
             <a className="btn primary" href="/demo">See a real run</a>
             <a className="btn" href={REPO}>Install from GitHub</a>
           </motion.div>
         </div>
-        <motion.div className="hero-art" initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8 }}>
-          <img src="/img/web-hero.png" alt="" className="hero-img" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
-          <HeroDoc />
+        <motion.div className="hero-art" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
+          <figure className="hero-window">
+            <div className="doc-chrome">
+              <span className="dot" /><span className="dot" /><span className="dot" />
+              <span className="doc-file">IBM Bob · Fine Print Auditor mode</span>
+              <span className="rec">● real run</span>
+            </div>
+            <video className="hero-video" src="/media/hero-bob.mp4" poster="/media/hero-bob-poster.jpg" autoPlay muted loop playsInline />
+          </figure>
+          <motion.figure className="hero-ledger" initial={{ opacity: 0, x: 24, y: 24 }} animate={{ opacity: 1, x: 0, y: 0 }} transition={{ delay: 0.9, duration: 0.7 }}>
+            <img src="/media/ledger-snippet.png" alt="The Tidewell privacy policy fact-checked: sections 3.2, 4.1 and 4.3 broken, 4.2 kept" />
+            <figcaption>The result: the policy, fact-checked</figcaption>
+          </motion.figure>
         </motion.div>
       </header>
 
