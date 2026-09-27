@@ -1,0 +1,35 @@
+diff --git a/examples/tidewell/src/analytics/pixel.ts b/examples/tidewell/src/analytics/pixel.ts
+new file mode 100644
+--- /dev/null
++++ b/examples/tidewell/src/analytics/pixel.ts
+@@ -0,0 +1,12 @@
++import type { Settings } from '../settings.ts';
++import { sha256Hex } from '../lib/hash.ts';
++
++// Conversion pixel for the growth team's signup campaign.
++export async function trackSignupConversion(settings: Settings, email: string): Promise<void> {
++  const params = new URLSearchParams({
++    id: settings.meta.pixelId,
++    ev: 'CompleteRegistration',
++    em: sha256Hex(email.trim().toLowerCase()),
++  });
++  await fetch(`https://graph.facebook.com/tr?${params.toString()}`, { method: 'POST' });
++}
+--- a/examples/tidewell/src/routes/auth.ts
++++ b/examples/tidewell/src/routes/auth.ts
+@@ -13,6 +13,7 @@
+ import { recordEvent } from '../analytics/outbox.ts';
+ import { sendWelcomeEmail } from '../integrations/postmark.ts';
+ import { sendVerificationSms } from '../integrations/twilio.ts';
++import { trackSignupConversion } from '../analytics/pixel.ts';
+ import { HttpError, parseBody } from '../lib/http.ts';
+ import { toE164 } from '../lib/phone.ts';
+ 
+@@ -59,6 +60,7 @@
+       ctx.logger.warn('welcome email failed', { userId: user.id, error: String(err) }),
+     );
+     recordEvent(ctx.db, 'signed_up', user, { marketingOptIn: user.marketingOptIn });
++    await trackSignupConversion(ctx.settings, user.email).catch(() => undefined);
+ 
+     res.status(201).json({
+       id: user.id,

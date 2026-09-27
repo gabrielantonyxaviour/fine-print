@@ -1,0 +1,26 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "^execute_command$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .bob/hooks/commit-guard.mjs",
+            "timeout": 300
+          }
+        ]
+      },
+      {
+        "matcher": "^(write_file|apply_diff|insert_content|search_and_replace)$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .bob/hooks/proof-lock.mjs",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

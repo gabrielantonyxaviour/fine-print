@@ -1,0 +1,88 @@
+{
+  "statements": [
+    {
+      "promiseId": "p-1-privacy-seriously",
+      "section": "1",
+      "quote": "We take your privacy seriously and are committed to protecting it.",
+      "expectedCategory": "human_review",
+      "expectedVerdictBefore": "needs_review",
+      "expectedVerdictAfterFix": "needs_review"
+    },
+    {
+      "promiseId": "p-3-1-email-optin",
+      "section": "3.1",
+      "quote": "We use your email address to run your account and, only if you opt in, to send you news and offers.",
+      "expectedCategory": "consent_gate",
+      "expectedVerdictBefore": "kept",
+      "expectedVerdictAfterFix": "kept",
+      "mutationPatch": "examples/tidewell/mutations/m-3-1-optin-ignored.patch"
+    },
+    {
+      "promiseId": "p-3-2-phone-2fa-only",
+      "section": "3.2",
+      "quote": "We use your phone number only to protect your account with two-step verification.",
+      "expectedCategory": "purpose_limitation",
+      "expectedVerdictBefore": "broken",
+      "expectedVerdictAfterFix": "kept"
+    },
+    {
+      "promiseId": "p-4-1-health-no-ads",
+      "section": "4.1",
+      "quote": "We never share your health information, including the reason for your appointment, with advertisers.",
+      "expectedCategory": "sharing",
+      "expectedVerdictBefore": "broken",
+      "expectedVerdictAfterFix": "kept"
+    },
+    {
+      "promiseId": "p-4-2-email-no-ads",
+      "section": "4.2",
+      "quote": "We never share your email address with advertisers.",
+      "expectedCategory": "sharing",
+      "expectedVerdictBefore": "kept",
+      "expectedVerdictAfterFix": "kept",
+      "mutationPatch": "examples/tidewell/mutations/m-4-2-leaky-pixel.patch"
+    },
+    {
+      "promiseId": "p-4-3-listed-processors",
+      "section": "4.3",
+      "quote": "We share personal data only with the service providers listed in section 7.",
+      "expectedCategory": "sharing",
+      "expectedVerdictBefore": "broken",
+      "expectedVerdictAfterFix": "kept"
+    },
+    {
+      "promiseId": "p-5-1-login-data-unreadable",
+      "section": "5.1",
+      "quote": "We never store or log your password in readable form.",
+      "expectedCategory": "security_storage",
+      "expectedVerdictBefore": "broken",
+      "expectedVerdictAfterFix": "kept"
+    },
+    {
+      "promiseId": "p-5-2-no-card-numbers",
+      "section": "5.2",
+      "quote": "We never store your full card number; payments are handled by Stripe.",
+      "expectedCategory": "security_storage",
+      "expectedVerdictBefore": "kept",
+      "expectedVerdictAfterFix": "kept",
+      "mutationPatch": "examples/tidewell/mutations/m-5-2-card-stored.patch"
+    },
+    {
+      "promiseId": "p-5-3-no-ad-cookies",
+      "section": "5.3",
+      "quote": "We do not use advertising or tracking cookies.",
+      "expectedCategory": "cookies_tracking",
+      "expectedVerdictBefore": "kept",
+      "expectedVerdictAfterFix": "kept",
+      "mutationPatch": "examples/tidewell/mutations/m-5-3-ad-cookie.patch"
+    },
+    {
+      "promiseId": "p-6-1-deletion-30-days",
+      "section": "6.1",
+      "quote": "When you delete your account, we erase your personal data within 30 days.",
+      "expectedCategory": "retention_deletion",
+      "expectedVerdictBefore": "broken",
+      "expectedVerdictAfterFix": "kept"
+    }
+  ]
+}

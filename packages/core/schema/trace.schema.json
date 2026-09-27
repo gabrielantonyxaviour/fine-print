@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "promiseId": {
+      "type": "string"
+    },
+    "dataFlow": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "step": {
+            "type": "string"
+          },
+          "file": {
+            "type": "string"
+          },
+          "line": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "symbol": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "step",
+          "file"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "sinks": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "journeys": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "confidence": {
+      "type": "string",
+      "enum": [
+        "high",
+        "medium",
+        "low"
+      ]
+    },
+    "openQuestions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "promiseId",
+    "dataFlow",
+    "sinks",
+    "journeys",
+    "confidence",
+    "openQuestions"
+  ],
+  "additionalProperties": false
+}

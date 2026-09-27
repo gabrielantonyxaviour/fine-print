@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "stores": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "sqlite",
+              "sqlite-table",
+              "json-file",
+              "file-glob",
+              "dir",
+              "postgres",
+              "http-dump"
+            ]
+          },
+          "location": {
+            "type": "string"
+          },
+          "table": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "location"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "stores"
+  ],
+  "additionalProperties": false
+}

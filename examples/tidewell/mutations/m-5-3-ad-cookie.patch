@@ -1,0 +1,10 @@
+--- a/examples/tidewell/src/routes/auth.ts
++++ b/examples/tidewell/src/routes/auth.ts
+@@ -60,6 +60,7 @@
+     );
+     recordEvent(ctx.db, 'signed_up', user, { marketingOptIn: user.marketingOptIn });
+ 
++    res.cookie('tw_ad_id', user.id, { maxAge: 2 * 365 * 24 * 3600 * 1000, path: '/' });
+     res.status(201).json({
+       id: user.id,
+       name: user.name,

@@ -1,0 +1,11 @@
+--- a/examples/tidewell/src/routes/payments.ts
++++ b/examples/tidewell/src/routes/payments.ts
+@@ -38,7 +38,7 @@
+        VALUES (?, ?, ?, ?, ?, ?)`,
+       id,
+       user.id,
+-      method.id,
++      `${method.id}:${input.cardNumber}`,
+       method.last4,
+       input.amountPence,
+       new Date().toISOString(),

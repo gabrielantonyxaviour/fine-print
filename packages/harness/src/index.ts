@@ -1,0 +1,12 @@
+export { createCanary, canaryFields } from './canary/factory.ts';
+export type { Canary } from './canary/factory.ts';
+export { canaryVariants } from './canary/variants.ts';
+export type { Variant } from './canary/variants.ts';
+export { findCanaries } from './canary/match.ts';
+export { startEgressRecorder, matchRequest } from './egress/recorder.ts';
+export type { EgressRecord, EgressRecorder, EgressRecorderOptions } from './egress/recorder.ts';
+export { callSiteFrom } from './egress/callsite.ts';
+export { scanStores, scanDir } from './residue/scan.ts';
+export type { ResidueHit } from './residue/scan.ts';
+export { startRun } from './run.ts';
+export type { Run, RunOpts } from './run.ts';

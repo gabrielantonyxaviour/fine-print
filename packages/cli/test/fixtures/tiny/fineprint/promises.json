@@ -1,0 +1,51 @@
+{
+  "policy": {
+    "title": "Tiny Test Policy",
+    "effectiveDate": "2025-01-01",
+    "sourcePath": "fineprint/PRIVACY.md",
+    "sha256": "abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890"
+  },
+  "promises": [
+    {
+      "id": "p-1-kept-sms",
+      "section": "2",
+      "quote": "Phone numbers are transmitted only to our SMS provider (Twilio) for message delivery.",
+      "category": "sharing",
+      "dataClasses": ["phone"],
+      "claim": {
+        "kind": "egress_only_to",
+        "data": ["phone"],
+        "allowedDestinations": ["api.twilio.com"]
+      },
+      "testability": "testable",
+      "rationale": "sendSms only calls Twilio; can be proven by egress assertion."
+    },
+    {
+      "id": "p-2-broken-ads",
+      "section": "2",
+      "quote": "Phone numbers are never shared with advertising networks or third-party analytics.",
+      "category": "sharing",
+      "dataClasses": ["phone"],
+      "claim": {
+        "kind": "egress_only_to",
+        "data": ["phone"],
+        "allowedDestinations": ["api.twilio.com"]
+      },
+      "testability": "testable",
+      "rationale": "trackSignup leaks phone hash to Facebook; proof will breach."
+    },
+    {
+      "id": "p-3-review",
+      "section": "5",
+      "quote": "A human privacy officer reviews all new data sharing integrations before launch.",
+      "category": "human_review",
+      "dataClasses": ["phone"],
+      "claim": {
+        "kind": "none",
+        "data": []
+      },
+      "testability": "human_review",
+      "rationale": "Requires manual review; no automated proof possible."
+    }
+  ]
+}

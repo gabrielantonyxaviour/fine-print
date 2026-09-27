@@ -1,0 +1,152 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "policy": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "effectiveDate": {
+          "type": "string"
+        },
+        "sourcePath": {
+          "type": "string"
+        },
+        "pdfPath": {
+          "type": "string"
+        },
+        "sha256": {
+          "type": "string",
+          "minLength": 64,
+          "maxLength": 64,
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "title",
+        "sourcePath",
+        "sha256"
+      ],
+      "additionalProperties": false
+    },
+    "promises": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^p-\\d+(-\\d+)*-[a-z0-9-]+$"
+          },
+          "section": {
+            "type": "string",
+            "minLength": 1
+          },
+          "quote": {
+            "type": "string",
+            "minLength": 10
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "sharing",
+              "purpose_limitation",
+              "retention_deletion",
+              "collection_minimization",
+              "security_storage",
+              "consent_gate",
+              "cookies_tracking",
+              "residency",
+              "human_review"
+            ]
+          },
+          "dataClasses": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "claim": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "egress_only_to",
+                  "egress_never_to",
+                  "no_residue_after",
+                  "never_stored",
+                  "consent_required",
+                  "cookies_only",
+                  "region_only",
+                  "none"
+                ]
+              },
+              "data": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "allowedDestinations": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "forbiddenDestinations": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "withinDays": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "condition": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "kind",
+              "data"
+            ],
+            "additionalProperties": false
+          },
+          "testability": {
+            "type": "string",
+            "enum": [
+              "testable",
+              "partial",
+              "human_review"
+            ]
+          },
+          "rationale": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "id",
+          "section",
+          "quote",
+          "category",
+          "dataClasses",
+          "claim",
+          "testability",
+          "rationale"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "policy",
+    "promises"
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,40 @@
+customModes:
+  - slug: fp-auditor
+    name: Fine Print Auditor
+    description: Fact-checks a privacy policy against this codebase with executable proofs.
+    roleDefinition: >-
+      You are Fine Print's auditor. You turn a privacy policy into testable promises, map where
+      personal data lives, and write executable proofs. You never edit application code.
+    whenToUse: Use to audit a target app's privacy policy (a PDF or Markdown) against its code.
+    customInstructions: >-
+      Follow the fp-audit skill exactly. Verdicts come only from running `pnpm --silent fineprint prove`.
+    groups:
+      - read
+      - execute
+      - skill
+      - todo
+      - subagent
+      - - edit
+        - fileRegex: "(^|/)fineprint/"
+          description: Only the target's fineprint/ folder
+    allowedSubagents:
+      - fp-tracer
+  - slug: fp-engineer
+    name: Fine Print Engineer
+    description: Fixes code so broken privacy promises are kept, without touching the proofs.
+    roleDefinition: >-
+      You are Fine Print's engineer. You change application code until every broken promise's
+      proof passes. You may never edit a proof.
+    whenToUse: Use after an audit, to fix broken promises.
+    customInstructions: Follow the fp-fix skill exactly.
+    groups:
+      - read
+      - execute
+      - skill
+      - todo
+      - subagent
+      - - edit
+        - fileRegex: "^(?!.*fineprint/proofs/)(?!.*GROUND_TRUTH).*$"
+          description: Anything except the proofs
+    allowedSubagents:
+      - fp-fixer

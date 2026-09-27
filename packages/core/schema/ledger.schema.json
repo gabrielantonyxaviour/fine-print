@@ -1,0 +1,287 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "policy": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "effectiveDate": {
+          "type": "string"
+        },
+        "sourcePath": {
+          "type": "string"
+        },
+        "pdfPath": {
+          "type": "string"
+        },
+        "sha256": {
+          "type": "string",
+          "minLength": 64,
+          "maxLength": 64,
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "title",
+        "sourcePath",
+        "sha256"
+      ],
+      "additionalProperties": false
+    },
+    "run": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "startedAt": {
+          "type": "string"
+        },
+        "durationMs": {
+          "type": "number"
+        },
+        "commit": {
+          "type": "string"
+        },
+        "harnessVersion": {
+          "type": "string"
+        },
+        "promiseCount": {
+          "type": "number"
+        },
+        "counts": {
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "enum": [
+              "kept",
+              "broken",
+              "needs_review",
+              "couldnt_check",
+              "pending"
+            ]
+          },
+          "additionalProperties": {
+            "type": "number"
+          },
+          "required": [
+            "kept",
+            "broken",
+            "needs_review",
+            "couldnt_check",
+            "pending"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "startedAt",
+        "durationMs",
+        "harnessVersion",
+        "promiseCount",
+        "counts"
+      ],
+      "additionalProperties": false
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "promiseId": {
+            "type": "string"
+          },
+          "section": {
+            "type": "string"
+          },
+          "quote": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "sharing",
+              "purpose_limitation",
+              "retention_deletion",
+              "collection_minimization",
+              "security_storage",
+              "consent_gate",
+              "cookies_tracking",
+              "residency",
+              "human_review"
+            ]
+          },
+          "verdict": {
+            "type": "string",
+            "enum": [
+              "kept",
+              "broken",
+              "needs_review",
+              "couldnt_check",
+              "pending"
+            ]
+          },
+          "reason": {
+            "type": "string"
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "kind": {
+                      "type": "string",
+                      "const": "egress"
+                    },
+                    "method": {
+                      "type": "string"
+                    },
+                    "host": {
+                      "type": "string"
+                    },
+                    "path": {
+                      "type": "string"
+                    },
+                    "matched": {
+                      "type": "object",
+                      "properties": {
+                        "field": {
+                          "type": "string"
+                        },
+                        "form": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "field",
+                        "form"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "callSite": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "kind",
+                    "method",
+                    "host",
+                    "path",
+                    "matched"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "kind": {
+                      "type": "string",
+                      "const": "residue"
+                    },
+                    "storeId": {
+                      "type": "string"
+                    },
+                    "location": {
+                      "type": "string"
+                    },
+                    "matched": {
+                      "type": "object",
+                      "properties": {
+                        "field": {
+                          "type": "string"
+                        },
+                        "form": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "field",
+                        "form"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "kind",
+                    "storeId",
+                    "location",
+                    "matched"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "kind": {
+                      "type": "string",
+                      "const": "cookie"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "attributes": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "kind",
+                    "name",
+                    "attributes"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "kind": {
+                      "type": "string",
+                      "const": "note"
+                    },
+                    "text": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "kind",
+                    "text"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            }
+          },
+          "proofPath": {
+            "type": "string"
+          },
+          "tracePath": {
+            "type": "string"
+          },
+          "durationMs": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "promiseId",
+          "section",
+          "quote",
+          "category",
+          "verdict",
+          "reason",
+          "evidence"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "policy",
+    "run",
+    "entries"
+  ],
+  "additionalProperties": false
+}

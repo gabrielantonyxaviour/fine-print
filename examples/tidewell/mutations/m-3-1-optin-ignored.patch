@@ -1,0 +1,11 @@
+--- a/examples/tidewell/src/jobs/nightly.ts
++++ b/examples/tidewell/src/jobs/nightly.ts
+@@ -14,7 +14,7 @@
+ async function syncNewsletter(ctx: AppContext): Promise<void> {
+   const members = all<{ email: string }>(
+     ctx.db,
+-    'SELECT email FROM users WHERE deleted_at IS NULL AND marketing_opt_in = 1',
++    'SELECT email FROM users WHERE deleted_at IS NULL',
+   );
+   for (const member of members) {
+     await subscribeMember(ctx.settings, member.email).catch((err: unknown) =>
