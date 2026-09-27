@@ -1,0 +1,22 @@
+{
+  "stores": [
+    {
+      "id": "main-db",
+      "kind": "sqlite",
+      "location": "tidewell.db",
+      "notes": "Primary SQLite database: users, sessions, appointments, payments, analytics_outbox, verification_codes"
+    },
+    {
+      "id": "search-index",
+      "kind": "json-file",
+      "location": "search-index.json",
+      "notes": "Bookings full-text search index written by BookingsIndex. Contains name, email, reason per appointment."
+    },
+    {
+      "id": "app-log",
+      "kind": "file-glob",
+      "location": "logs/*.log",
+      "notes": "Structured JSON-lines log. At LOG_LEVEL=debug includes req.body for /api/signup and /api/login."
+    }
+  ]
+}

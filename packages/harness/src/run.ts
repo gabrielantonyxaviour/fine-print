@@ -64,7 +64,7 @@ function parseCookieAttributes(setCookieHeader: string): string {
 export function startRun(opts: RunOpts): Run {
   const dataDir = mkdtempSync(join(tmpdir(), 'fineprint-'));
   const canary = createCanary();
-  const egress = startEgressRecorder({ targetRoot: opts.targetRoot });
+  const egress = startEgressRecorder({ targetRoot: opts.targetRoot, onSetCookie: (headers) => recordCookies(headers) });
 
   const storesFilePath = opts.storesFile ?? join(opts.targetRoot, 'fineprint', 'stores.json');
   const stores = loadStores(storesFilePath);
@@ -101,8 +101,8 @@ export function startRun(opts: RunOpts): Run {
 
         for (const matched of matches) {
           let bad = false;
-          if (expectOpts.onlyTo && !expectOpts.onlyTo.includes(record.host)) bad = true;
-          if (expectOpts.never && expectOpts.never.includes(record.host)) bad = true;
+          if (expectOpts.onlyTo && !hostIn(record.host, expectOpts.onlyTo)) bad = true;
+          if (expectOpts.never && hostIn(record.host, expectOpts.never)) bad = true;
           if (bad) {
             offending.push({
               kind: 'egress',
@@ -222,4 +222,9 @@ export function startRun(opts: RunOpts): Run {
     expect: expectApi,
     stop,
   };
+}
+
+// A host rule covers its subdomains: 'api.mailchimp.com' matches 'us21.api.mailchimp.com'.
+function hostIn(host: string, list: string[]): boolean {
+  return list.some((h) => host === h || host.endsWith(`.${h}`));
 }

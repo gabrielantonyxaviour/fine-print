@@ -1,0 +1,274 @@
+{
+  "policy": {
+    "title": "Tidewell Privacy Notice",
+    "effectiveDate": "2026-09-01",
+    "sourcePath": "PRIVACY.md",
+    "pdfPath": "privacy-policy.pdf",
+    "sha256": "76b945b80972ee033b49a52e7d4bcd5773a1026b85499c9a4189c4d72d61caaa"
+  },
+  "run": {
+    "id": "c5b24adc97d1",
+    "startedAt": "2026-09-27T09:11:55.337Z",
+    "durationMs": 680,
+    "commit": "2335997",
+    "harnessVersion": "0.1.0",
+    "promiseCount": 9,
+    "counts": {
+      "kept": 4,
+      "broken": 5,
+      "needs_review": 0,
+      "couldnt_check": 0,
+      "pending": 0
+    }
+  },
+  "entries": [
+    {
+      "promiseId": "p-3-1-email-optin-only",
+      "section": "3.1",
+      "quote": "We use your email address to run your account and, only if you opt in, to send you news and offers.",
+      "category": "consent_gate",
+      "verdict": "kept",
+      "reason": "proof passed",
+      "evidence": [],
+      "proofPath": "fineprint/proofs/p-3-1-email-optin-only.proof.test.ts",
+      "durationMs": 172.71662499999996
+    },
+    {
+      "promiseId": "p-3-2-phone-2fa-only",
+      "section": "3.2",
+      "quote": "We use your phone number only to protect your account with two-step verification.",
+      "category": "purpose_limitation",
+      "verdict": "broken",
+      "reason": "sha256(phone) sent to graph.facebook.com",
+      "evidence": [
+        {
+          "kind": "egress",
+          "method": "POST",
+          "host": "graph.facebook.com",
+          "path": "/v19.0/dev-audience/users?access_token=meta_dev",
+          "matched": {
+            "field": "phone",
+            "form": "sha256"
+          },
+          "callSite": "src/integrations/meta.ts:43"
+        }
+      ],
+      "proofPath": "fineprint/proofs/p-3-2-phone-2fa-only.proof.test.ts",
+      "durationMs": 254.746167
+    },
+    {
+      "promiseId": "p-4-1-health-never-advertisers",
+      "section": "4.1",
+      "quote": "We never share your health information, including the reason for your appointment, with advertisers.",
+      "category": "sharing",
+      "verdict": "broken",
+      "reason": "healthReason sent to graph.facebook.com",
+      "evidence": [
+        {
+          "kind": "egress",
+          "method": "POST",
+          "host": "graph.facebook.com",
+          "path": "/v19.0/dev-pixel/events?access_token=meta_dev",
+          "matched": {
+            "field": "healthReason",
+            "form": "raw"
+          },
+          "callSite": "src/integrations/meta.ts:18"
+        }
+      ],
+      "proofPath": "fineprint/proofs/p-4-1-health-never-advertisers.proof.test.ts",
+      "durationMs": 242.13241699999998
+    },
+    {
+      "promiseId": "p-4-2-email-never-advertisers",
+      "section": "4.2",
+      "quote": "We never share your email address with advertisers.",
+      "category": "sharing",
+      "verdict": "kept",
+      "reason": "proof passed",
+      "evidence": [],
+      "proofPath": "fineprint/proofs/p-4-2-email-never-advertisers.proof.test.ts",
+      "durationMs": 229.92191700000006
+    },
+    {
+      "promiseId": "p-4-3-providers-only",
+      "section": "4.3",
+      "quote": "We share personal data only with the service providers listed in section 7.",
+      "category": "sharing",
+      "verdict": "kept",
+      "reason": "proof passed",
+      "evidence": [],
+      "proofPath": "fineprint/proofs/p-4-3-providers-only.proof.test.ts",
+      "durationMs": 270.33941699999997
+    },
+    {
+      "promiseId": "p-5-1-login-data-not-readable",
+      "section": "5.1",
+      "quote": "We never store or log your password in readable form.",
+      "category": "security_storage",
+      "verdict": "broken",
+      "reason": "pw found in undeclared at logs/app.log",
+      "evidence": [
+        {
+          "kind": "residue",
+          "storeId": "undeclared",
+          "location": "logs/app.log",
+          "matched": {
+            "field": "pw",
+            "form": "raw"
+          }
+        }
+      ],
+      "proofPath": "fineprint/proofs/p-5-1-login-data-not-readable.proof.test.ts",
+      "durationMs": 205.88183399999997
+    },
+    {
+      "promiseId": "p-5-2-card-never-stored",
+      "section": "5.2",
+      "quote": "We never store your full card number; payments are handled by Stripe.",
+      "category": "security_storage",
+      "verdict": "kept",
+      "reason": "proof passed",
+      "evidence": [],
+      "proofPath": "fineprint/proofs/p-5-2-card-never-stored.proof.test.ts",
+      "durationMs": 224.51291699999996
+    },
+    {
+      "promiseId": "p-5-3-session-cookie-only",
+      "section": "5.3",
+      "quote": "We do not use advertising or tracking cookies. We set a single cookie that keeps you signed in, and it is removed when you sign out.",
+      "category": "cookies_tracking",
+      "verdict": "broken",
+      "reason": "unexpected cookie: tw_ad_id",
+      "evidence": [
+        {
+          "kind": "cookie",
+          "name": "tw_ad_id",
+          "attributes": "Max-Age=63072000; Path=/; Expires=Tue, 26 Sep 2028 09:11:55 GMT"
+        }
+      ],
+      "proofPath": "fineprint/proofs/p-5-3-session-cookie-only.proof.test.ts",
+      "durationMs": 220.42820899999998
+    },
+    {
+      "promiseId": "p-6-1-deletion-30-days",
+      "section": "6.1",
+      "quote": "When you delete your account, we erase your personal data within 30 days.",
+      "category": "retention_deletion",
+      "verdict": "broken",
+      "reason": "email found in main-db at analytics_outbox.payload_json (rowid 1)",
+      "evidence": [
+        {
+          "kind": "residue",
+          "storeId": "main-db",
+          "location": "analytics_outbox.payload_json (rowid 1)",
+          "matched": {
+            "field": "email",
+            "form": "raw"
+          }
+        },
+        {
+          "kind": "residue",
+          "storeId": "main-db",
+          "location": "analytics_outbox.payload_json (rowid 2)",
+          "matched": {
+            "field": "email",
+            "form": "raw"
+          }
+        },
+        {
+          "kind": "residue",
+          "storeId": "main-db",
+          "location": "analytics_outbox.payload_json (rowid 3)",
+          "matched": {
+            "field": "email",
+            "form": "raw"
+          }
+        },
+        {
+          "kind": "residue",
+          "storeId": "main-db",
+          "location": "raw bytes (deleted but not erased)",
+          "matched": {
+            "field": "name",
+            "form": "raw"
+          }
+        },
+        {
+          "kind": "residue",
+          "storeId": "main-db",
+          "location": "raw bytes (deleted but not erased)",
+          "matched": {
+            "field": "phone",
+            "form": "raw"
+          }
+        },
+        {
+          "kind": "residue",
+          "storeId": "main-db",
+          "location": "raw bytes (deleted but not erased)",
+          "matched": {
+            "field": "phone",
+            "form": "digits"
+          }
+        },
+        {
+          "kind": "residue",
+          "storeId": "search-index",
+          "location": "$.docs[0].name",
+          "matched": {
+            "field": "name",
+            "form": "raw"
+          }
+        },
+        {
+          "kind": "residue",
+          "storeId": "search-index",
+          "location": "$.docs[0].email",
+          "matched": {
+            "field": "email",
+            "form": "raw"
+          }
+        },
+        {
+          "kind": "residue",
+          "storeId": "undeclared",
+          "location": "logs/app.log",
+          "matched": {
+            "field": "name",
+            "form": "raw"
+          }
+        },
+        {
+          "kind": "residue",
+          "storeId": "undeclared",
+          "location": "logs/app.log",
+          "matched": {
+            "field": "email",
+            "form": "raw"
+          }
+        },
+        {
+          "kind": "residue",
+          "storeId": "undeclared",
+          "location": "logs/app.log",
+          "matched": {
+            "field": "phone",
+            "form": "raw"
+          }
+        },
+        {
+          "kind": "residue",
+          "storeId": "undeclared",
+          "location": "logs/app.log",
+          "matched": {
+            "field": "phone",
+            "form": "digits"
+          }
+        }
+      ],
+      "proofPath": "fineprint/proofs/p-6-1-deletion-30-days.proof.test.ts",
+      "durationMs": 252.701459
+    }
+  ]
+}

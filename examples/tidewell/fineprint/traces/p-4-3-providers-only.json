@@ -1,0 +1,63 @@
+{
+  "promiseId": "p-4-3-providers-only",
+  "dataFlow": [
+    {
+      "step": "User submits name, email, phone at signup",
+      "file": "src/routes/auth.ts",
+      "line": 41,
+      "symbol": "authRoutes /signup"
+    },
+    {
+      "step": "email + name sent to api.postmarkapp.com via sendWelcomeEmail",
+      "file": "src/integrations/postmark.ts",
+      "line": 10,
+      "symbol": "sendWelcomeEmail"
+    },
+    {
+      "step": "User submits email at login, phone retrieved from DB; phone sent to api.twilio.com via sendVerificationSms",
+      "file": "src/integrations/twilio.ts",
+      "line": 11,
+      "symbol": "sendVerificationSms"
+    },
+    {
+      "step": "Nightly job: email of opted-in users sent to api.mailchimp.com via subscribeMember",
+      "file": "src/integrations/mailchimp.ts",
+      "line": 8,
+      "symbol": "subscribeMember"
+    },
+    {
+      "step": "Nightly job: sha256(phone) of all non-deleted users sent to graph.facebook.com via uploadPhoneAudience",
+      "file": "src/integrations/meta.ts",
+      "line": 41,
+      "symbol": "uploadPhoneAudience"
+    },
+    {
+      "step": "Booking: sha256(userId) sent to graph.facebook.com via sendScheduleEvent; no raw email/phone/name included",
+      "file": "src/integrations/meta.ts",
+      "line": 17,
+      "symbol": "sendScheduleEvent"
+    },
+    {
+      "step": "Payment: card number sent to api.stripe.com via createPaymentMethod; no email/phone/name included",
+      "file": "src/integrations/stripe.ts",
+      "line": 26,
+      "symbol": "createPaymentMethod"
+    }
+  ],
+  "sinks": [
+    "api.postmarkapp.com",
+    "api.twilio.com",
+    "api.mailchimp.com",
+    "graph.facebook.com",
+    "api.stripe.com"
+  ],
+  "journeys": [
+    "signupOptIn",
+    "login",
+    "book",
+    "pay",
+    "nightlyJobs"
+  ],
+  "confidence": "high",
+  "openQuestions": []
+}

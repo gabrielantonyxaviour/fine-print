@@ -1,0 +1,47 @@
+{
+  "promiseId": "p-3-2-phone-2fa-only",
+  "dataFlow": [
+    {
+      "step": "Collected from user at signup via POST /api/signup body field 'phone', normalised to E.164",
+      "file": "src/routes/auth.ts",
+      "line": 43,
+      "symbol": "authRoutes/router.post('/signup')"
+    },
+    {
+      "step": "Stored raw E.164 value in SQLite column users.phone",
+      "file": "src/accounts/users.ts",
+      "symbol": "createUser"
+    },
+    {
+      "step": "Read from users row and passed to sendVerificationSms on every login",
+      "file": "src/routes/auth.ts",
+      "line": 83,
+      "symbol": "authRoutes/router.post('/login')"
+    },
+    {
+      "step": "sendVerificationSms POSTs the raw phone number to api.twilio.com (To= field in URLSearchParams body)",
+      "file": "src/integrations/twilio.ts",
+      "line": 11,
+      "symbol": "sendVerificationSms"
+    },
+    {
+      "step": "Nightly job syncLookalikeAudience SELECTs phone from ALL non-deleted users",
+      "file": "src/jobs/nightly.ts",
+      "line": 28,
+      "symbol": "syncLookalikeAudience"
+    },
+    {
+      "step": "uploadPhoneAudience hashes each phone with sha256 then POSTs to graph.facebook.com Custom Audiences endpoint — BREACH of purpose-limitation promise",
+      "file": "src/integrations/meta.ts",
+      "line": 42,
+      "symbol": "uploadPhoneAudience"
+    }
+  ],
+  "sinks": [
+    "api.twilio.com (raw phone in URLSearchParams To= — legitimate 2FA use)",
+    "graph.facebook.com (sha256(phone) in Custom Audiences payload — violates promise)"
+  ],
+  "journeys": ["signup", "login", "nightlyJobs"],
+  "confidence": "high",
+  "openQuestions": []
+}

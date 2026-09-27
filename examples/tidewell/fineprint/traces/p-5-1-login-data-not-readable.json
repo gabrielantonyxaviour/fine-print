@@ -1,0 +1,50 @@
+{
+  "promiseId": "p-5-1-login-data-not-readable",
+  "dataFlow": [
+    {
+      "step": "User submits password in POST /api/signup or /api/login request body",
+      "file": "examples/tidewell/src/routes/auth.ts",
+      "line": 42,
+      "symbol": "authRoutes/router.post('/signup')"
+    },
+    {
+      "step": "requestLog middleware fires on response finish; for /api/signup and /api/login paths, fields.body = req.body is set (includes raw password) and written via logger.debug",
+      "file": "examples/tidewell/src/middleware/request-log.ts",
+      "line": 28,
+      "symbol": "requestLog"
+    },
+    {
+      "step": "logger.debug serialises the log record (including body.password) as a JSON line appended to logs/app.log",
+      "file": "examples/tidewell/src/logger.ts",
+      "line": 24,
+      "symbol": "createLogger/write"
+    },
+    {
+      "step": "Password is hashed with bcrypt before INSERT; only pw_hash is stored in the users table — raw password never written to SQLite",
+      "file": "examples/tidewell/src/routes/auth.ts",
+      "line": 49,
+      "symbol": "authRoutes/router.post('/signup')"
+    },
+    {
+      "step": "createUser inserts pw_hash (bcrypt digest) into users.pw_hash — raw password absent from DB",
+      "file": "examples/tidewell/src/accounts/users.ts",
+      "line": 56,
+      "symbol": "createUser"
+    },
+    {
+      "step": "LOG_LEVEL defaults to 'debug', so logger.debug calls are not filtered out",
+      "file": "examples/tidewell/src/settings.ts",
+      "line": 7,
+      "symbol": "EnvSchema"
+    }
+  ],
+  "sinks": [
+    "app-log"
+  ],
+  "journeys": [
+    "signup",
+    "login"
+  ],
+  "confidence": "high",
+  "openQuestions": []
+}

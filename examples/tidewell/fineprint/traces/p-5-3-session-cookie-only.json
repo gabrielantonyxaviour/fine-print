@@ -1,0 +1,33 @@
+{
+  "promiseId": "p-5-3-session-cookie-only",
+  "dataFlow": [
+    {
+      "step": "Cookie name is defined as the constant SESSION_COOKIE",
+      "file": "examples/tidewell/src/accounts/sessions.ts",
+      "line": 5,
+      "symbol": "SESSION_COOKIE"
+    },
+    {
+      "step": "tw_session cookie is set on successful login (POST /api/login)",
+      "file": "examples/tidewell/src/routes/auth.ts",
+      "line": 80,
+      "symbol": "authRoutes/router.post(/login)"
+    },
+    {
+      "step": "tw_session cookie is set again on 2FA verification (POST /api/login/verify)",
+      "file": "examples/tidewell/src/routes/auth.ts",
+      "line": 96,
+      "symbol": "authRoutes/router.post(/login/verify)"
+    },
+    {
+      "step": "tw_session cookie is cleared on account deletion (POST /api/me/delete)",
+      "file": "examples/tidewell/src/routes/me.ts",
+      "line": 49,
+      "symbol": "meRoutes/router.post(/me/delete)"
+    }
+  ],
+  "sinks": ["tw_session (browser cookie)"],
+  "journeys": ["signup", "login", "book", "deleteAccount"],
+  "confidence": "high",
+  "openQuestions": []
+}

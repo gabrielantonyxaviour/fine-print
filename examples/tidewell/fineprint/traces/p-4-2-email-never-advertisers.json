@@ -1,0 +1,45 @@
+{
+  "promiseId": "p-4-2-email-never-advertisers",
+  "dataFlow": [
+    {
+      "step": "User submits email at signup",
+      "file": "src/routes/auth.ts",
+      "symbol": "POST /api/signup"
+    },
+    {
+      "step": "Email written to users table in SQLite",
+      "file": "src/accounts/users.ts"
+    },
+    {
+      "step": "Nightly job queries email for opted-in users only",
+      "file": "src/jobs/nightly.ts",
+      "line": 15,
+      "symbol": "syncNewsletter"
+    },
+    {
+      "step": "Email sent to api.mailchimp.com (newsletter provider, not advertiser)",
+      "file": "src/integrations/mailchimp.ts",
+      "line": 10,
+      "symbol": "subscribeMember"
+    },
+    {
+      "step": "Meta Conversions API call uses only sha256(userId) — no email field",
+      "file": "src/integrations/meta.ts",
+      "line": 27,
+      "symbol": "sendScheduleEvent"
+    },
+    {
+      "step": "Meta Custom Audiences call uses only sha256(phone) — no email field",
+      "file": "src/integrations/meta.ts",
+      "line": 42,
+      "symbol": "uploadPhoneAudience"
+    }
+  ],
+  "sinks": [
+    "api.mailchimp.com (opted-in newsletter subscribers only)",
+    "graph.facebook.com (hashed userId and hashed phone only — email excluded)"
+  ],
+  "journeys": ["signup", "login", "book", "nightlyJobs"],
+  "confidence": "high",
+  "openQuestions": []
+}

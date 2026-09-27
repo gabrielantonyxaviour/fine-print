@@ -1,0 +1,33 @@
+{
+  "promiseId": "p-5-2-card-never-stored",
+  "dataFlow": [
+    {
+      "step": "User submits payment form with full card number in req.body.cardNumber",
+      "file": "src/routes/payments.ts",
+      "line": 24,
+      "symbol": "paymentRoutes/router.post /payments"
+    },
+    {
+      "step": "Full card number is passed to createPaymentMethod and transmitted to api.stripe.com; the function returns only { id, last4 }",
+      "file": "src/integrations/stripe.ts",
+      "line": 26,
+      "symbol": "createPaymentMethod"
+    },
+    {
+      "step": "Only method.id (stripe ref) and method.last4 are written to the payments table; no card number column exists",
+      "file": "src/routes/payments.ts",
+      "line": 37,
+      "symbol": "paymentRoutes/router.post /payments"
+    },
+    {
+      "step": "Request logger only logs bodies for /api/signup and /api/login prefixes, not /api/payments",
+      "file": "src/middleware/request-log.ts",
+      "line": 8,
+      "symbol": "BODY_LOG_PREFIXES"
+    }
+  ],
+  "sinks": ["main-db", "app-log", "search-index"],
+  "journeys": ["signup", "login", "pay"],
+  "confidence": "high",
+  "openQuestions": []
+}

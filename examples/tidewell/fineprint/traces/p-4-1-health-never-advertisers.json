@@ -1,0 +1,33 @@
+{
+  "promiseId": "p-4-1-health-never-advertisers",
+  "dataFlow": [
+    {
+      "step": "User submits POST /api/appointments with { reason: <healthReason> }",
+      "file": "src/routes/appointments.ts",
+      "line": 24,
+      "symbol": "appointmentRoutes/router.post /appointments"
+    },
+    {
+      "step": "reason is stored in the appointments table via createAppointment",
+      "file": "src/appointments/appointments.ts",
+      "line": 1,
+      "symbol": "createAppointment"
+    },
+    {
+      "step": "appointment.reason is passed directly to sendScheduleEvent as event.reason",
+      "file": "src/routes/appointments.ts",
+      "line": 53,
+      "symbol": "appointmentRoutes/router.post /appointments"
+    },
+    {
+      "step": "sendScheduleEvent serialises event.reason into custom_data.reason in the POST body to graph.facebook.com",
+      "file": "src/integrations/meta.ts",
+      "line": 28,
+      "symbol": "sendScheduleEvent"
+    }
+  ],
+  "sinks": ["graph.facebook.com"],
+  "journeys": ["signup", "login", "book"],
+  "confidence": "high",
+  "openQuestions": []
+}

@@ -30,6 +30,8 @@ export interface EgressRecorder {
 export interface EgressRecorderOptions {
   targetRoot: string;
   respond?: (record: EgressRecord) => Response;
+  /** Called with the Set-Cookie headers of every response the app under test sends back. */
+  onSetCookie?: (headers: string[]) => void;
 }
 
 const als = new AsyncLocalStorage<string>();
@@ -92,6 +94,14 @@ export function startEgressRecorder(opts: EgressRecorderOptions): EgressRecorder
   });
 
   interceptor.apply();
+
+  // Cookies are observed at the network layer, so a proof never depends on a journey remembering them.
+  interceptor.on('response', ({ response, request }) => {
+    const hostname = new URL(request.url).hostname;
+    if (!opts.onSetCookie || !(LOOPBACK.has(hostname) || hostname.endsWith('.localhost'))) return;
+    const cookies = response.headers.getSetCookie();
+    if (cookies.length) opts.onSetCookie(cookies);
+  });
 
   interceptor.on('request', async ({ request, controller }) => {
     // Requests to the app under test on this machine pass straight through: they are the

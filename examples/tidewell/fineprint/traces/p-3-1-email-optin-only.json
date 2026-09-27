@@ -1,0 +1,33 @@
+{
+  "promiseId": "p-3-1-email-optin-only",
+  "dataFlow": [
+    {
+      "step": "Signup stores marketingOptIn as marketing_opt_in (0 = false) in SQLite users table",
+      "file": "examples/tidewell/src/routes/auth.ts",
+      "line": 55,
+      "symbol": "authRoutes/router.post('/signup')"
+    },
+    {
+      "step": "createUser writes marketing_opt_in = input.marketingOptIn ? 1 : 0 to the database",
+      "file": "examples/tidewell/src/accounts/users.ts",
+      "line": 63,
+      "symbol": "createUser"
+    },
+    {
+      "step": "syncNewsletter queries only rows WHERE marketing_opt_in = 1 to build the subscriber list",
+      "file": "examples/tidewell/src/jobs/nightly.ts",
+      "line": 17,
+      "symbol": "syncNewsletter"
+    },
+    {
+      "step": "subscribeMember POSTs email_address to https://<dc>.api.mailchimp.com/3.0/lists/<listId>/members",
+      "file": "examples/tidewell/src/integrations/mailchimp.ts",
+      "line": 16,
+      "symbol": "subscribeMember"
+    }
+  ],
+  "sinks": ["api.mailchimp.com"],
+  "journeys": ["signup", "nightlyJobs"],
+  "confidence": "high",
+  "openQuestions": []
+}

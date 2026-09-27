@@ -1,0 +1,141 @@
+{
+  "policy": {
+    "title": "Tidewell Privacy Notice",
+    "effectiveDate": "2026-09-01",
+    "sourcePath": "PRIVACY.md",
+    "pdfPath": "privacy-policy.pdf",
+    "sha256": "76b945b80972ee033b49a52e7d4bcd5773a1026b85499c9a4189c4d72d61caaa"
+  },
+  "promises": [
+    {
+      "id": "p-3-1-email-optin-only",
+      "section": "3.1",
+      "quote": "We use your email address to run your account and, only if you opt in, to send you news and offers.",
+      "category": "consent_gate",
+      "dataClasses": ["email"],
+      "claim": {
+        "kind": "consent_required",
+        "data": ["email"],
+        "condition": "marketingOptIn === true"
+      },
+      "testability": "testable",
+      "rationale": "Mailchimp subscription is triggered only for opted-in users in syncNewsletter. Proof drives signup with opt-out then nightly job and asserts Mailchimp never receives the email."
+    },
+    {
+      "id": "p-3-2-phone-2fa-only",
+      "section": "3.2",
+      "quote": "We use your phone number only to protect your account with two-step verification.",
+      "category": "purpose_limitation",
+      "dataClasses": ["phone"],
+      "claim": {
+        "kind": "egress_only_to",
+        "data": ["phone"],
+        "allowedDestinations": ["api.twilio.com"]
+      },
+      "testability": "testable",
+      "rationale": "Phone must only leave the system via Twilio SMS. The nightly job also uploads phone numbers to Meta Custom Audiences — egress probe will catch this breach."
+    },
+    {
+      "id": "p-4-1-health-never-advertisers",
+      "section": "4.1",
+      "quote": "We never share your health information, including the reason for your appointment, with advertisers.",
+      "category": "sharing",
+      "dataClasses": ["healthReason"],
+      "claim": {
+        "kind": "egress_never_to",
+        "data": ["healthReason"],
+        "forbiddenDestinations": ["graph.facebook.com"]
+      },
+      "testability": "testable",
+      "rationale": "sendScheduleEvent sends custom_data.reason to graph.facebook.com — this is the appointment reason (health info). The egress probe will detect it."
+    },
+    {
+      "id": "p-4-2-email-never-advertisers",
+      "section": "4.2",
+      "quote": "We never share your email address with advertisers.",
+      "category": "sharing",
+      "dataClasses": ["email"],
+      "claim": {
+        "kind": "egress_never_to",
+        "data": ["email"],
+        "forbiddenDestinations": ["graph.facebook.com"]
+      },
+      "testability": "testable",
+      "rationale": "Meta Conversions API and Custom Audiences calls must not carry the raw email address. Mailchimp is a newsletter provider, not an advertiser."
+    },
+    {
+      "id": "p-4-3-providers-only",
+      "section": "4.3",
+      "quote": "We share personal data only with the service providers listed in section 7.",
+      "category": "sharing",
+      "dataClasses": ["email", "phone", "name"],
+      "claim": {
+        "kind": "egress_only_to",
+        "data": ["email", "phone", "name"],
+        "allowedDestinations": [
+          "api.twilio.com",
+          "api.postmarkapp.com",
+          "api.mailchimp.com",
+          "api.stripe.com",
+          "graph.facebook.com"
+        ]
+      },
+      "testability": "testable",
+      "rationale": "All external HTTP calls must go only to the five listed providers. Drives the full user journey to exercise every egress path."
+    },
+    {
+      "id": "p-5-1-login-data-not-readable",
+      "section": "5.1",
+      "quote": "We never store or log your password in readable form.",
+      "category": "security_storage",
+      "dataClasses": ["pw"],
+      "claim": {
+        "kind": "never_stored",
+        "data": ["pw"]
+      },
+      "testability": "testable",
+      "rationale": "The database and log files must never contain the plaintext password. Proof scans residue after signup."
+    },
+    {
+      "id": "p-5-2-card-never-stored",
+      "section": "5.2",
+      "quote": "We never store your full card number; payments are handled by Stripe.",
+      "category": "security_storage",
+      "dataClasses": ["card.number"],
+      "claim": {
+        "kind": "never_stored",
+        "data": ["card.number"]
+      },
+      "testability": "testable",
+      "rationale": "After a payment the full card number must not appear in the SQLite db, search index or log files."
+    },
+    {
+      "id": "p-5-3-session-cookie-only",
+      "section": "5.3",
+      "quote": "We do not use advertising or tracking cookies. We set a single cookie that keeps you signed in, and it is removed when you sign out.",
+      "category": "cookies_tracking",
+      "dataClasses": [],
+      "claim": {
+        "kind": "cookies_only",
+        "data": [],
+        "allowedDestinations": ["tw_session"]
+      },
+      "testability": "testable",
+      "rationale": "Only the tw_session cookie should be set across the full login/book/signout flow."
+    },
+    {
+      "id": "p-6-1-deletion-30-days",
+      "section": "6.1",
+      "quote": "When you delete your account, we erase your personal data within 30 days.",
+      "category": "retention_deletion",
+      "dataClasses": ["email", "name", "phone"],
+      "claim": {
+        "kind": "no_residue_after",
+        "data": ["email", "name", "phone"],
+        "withinDays": 30
+      },
+      "testability": "testable",
+      "rationale": "After account deletion + retention job run at day 31, canary data must not remain in any store."
+    }
+  ]
+}

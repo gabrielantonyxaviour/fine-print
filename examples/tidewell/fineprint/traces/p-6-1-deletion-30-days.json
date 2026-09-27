@@ -1,0 +1,51 @@
+{
+  "promiseId": "p-6-1-deletion-30-days",
+  "dataFlow": [
+    {
+      "step": "User signs up; email, name, phone written to SQLite users table",
+      "file": "src/accounts/users.ts",
+      "line": 52,
+      "symbol": "createUser"
+    },
+    {
+      "step": "Booking created; name and email also written to search-index.json via BookingsIndex.add()",
+      "file": "src/routes/appointments.ts",
+      "line": 37,
+      "symbol": "appointmentRoutes/router.post/ctx.bookings.add"
+    },
+    {
+      "step": "Account deletion sets deleted_at on the users row (soft delete); sessions and verification_codes removed immediately",
+      "file": "src/accounts/users.ts",
+      "line": 99,
+      "symbol": "softDeleteUser"
+    },
+    {
+      "step": "Retention job deletes payments, appointments, verification_codes, sessions, users rows in SQLite for accounts whose deleted_at is older than 30 days",
+      "file": "src/jobs/retention.ts",
+      "line": 8,
+      "symbol": "runRetentionJobs"
+    },
+    {
+      "step": "search-index.json is NEVER touched by the retention job — name and email remain in the JSON file indefinitely after account erasure",
+      "file": "src/jobs/retention.ts",
+      "line": 16,
+      "symbol": "runRetentionJobs"
+    }
+  ],
+  "sinks": [
+    "main-db (SQLite: users, appointments, payments, sessions, verification_codes)",
+    "search-index (JSON file: search-index.json — name, email, reason per booking)"
+  ],
+  "journeys": [
+    "signup",
+    "login",
+    "book",
+    "deleteAccount",
+    "retentionJob"
+  ],
+  "confidence": "high",
+  "openQuestions": [
+    "The retention job purges SQLite rows but never removes entries from search-index.json. The promise is broken: name and email survive in the search index past 30 days.",
+    "SQLite DELETE without PRAGMA secure_delete=ON may leave canary bytes in freed pages; raw-bytes scan will also catch this."
+  ]
+}
