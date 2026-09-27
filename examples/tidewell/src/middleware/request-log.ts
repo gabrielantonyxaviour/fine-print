@@ -18,13 +18,14 @@ export function requestLog(logger: Logger) {
 
     res.on('finish', () => {
       const durationMs = Number(process.hrtime.bigint() - startedAt) / 1e6;
+      const path = req.originalUrl.split('?')[0] ?? req.path;
       const fields: Record<string, unknown> = {
         method: req.method,
-        path: req.path,
+        path,
         status: res.statusCode,
         durationMs: Math.round(durationMs * 100) / 100,
       };
-      if (shouldLogBody(req.path)) fields.body = req.body;
+      if (shouldLogBody(path)) fields.body = req.body;
       logger.debug('request', fields);
     });
 

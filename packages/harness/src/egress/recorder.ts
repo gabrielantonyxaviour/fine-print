@@ -9,6 +9,7 @@ import { callSiteFrom } from './callsite.ts';
 import { findCanaries } from '../canary/match.ts';
 
 const MAX_BODY = 64 * 1024;
+const LOOPBACK = new Set(['127.0.0.1', 'localhost', '::1', '[::1]']);
 
 export interface EgressRecord {
   method: string;
@@ -93,6 +94,10 @@ export function startEgressRecorder(opts: EgressRecorderOptions): EgressRecorder
   interceptor.apply();
 
   interceptor.on('request', async ({ request, controller }) => {
+    // Requests to the app under test on this machine pass straight through: they are the
+    // proof driving the target, not data leaving it.
+    const hostname = new URL(request.url).hostname;
+    if (LOOPBACK.has(hostname) || hostname.endsWith('.localhost')) return;
     const stack = als.getStore();
     const callSite = callSiteFrom(stack, opts.targetRoot);
 
