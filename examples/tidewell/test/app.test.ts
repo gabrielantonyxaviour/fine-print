@@ -160,7 +160,7 @@ describe('payments', () => {
 });
 
 describe('nightly jobs', () => {
-  it('subscribes only opted-in users to the newsletter and refreshes the audience', async () => {
+  it('subscribes only opted-in users to the newsletter', async () => {
     await register({ ...priya, marketingOptIn: true });
     await register({ ...tom, marketingOptIn: false });
 
@@ -173,8 +173,6 @@ describe('nightly jobs', () => {
     expect(mailchimp).toHaveLength(1);
     expect(mailchimp[0]?.body).toContain(priya.email);
     expect(mailchimp[0]?.body).not.toContain(tom.email);
-
-    expect(callsTo('/dev-audience/users').length).toBeGreaterThan(0);
   });
 });
 

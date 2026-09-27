@@ -53,7 +53,6 @@ export function appointmentRoutes(ctx: AppContext): Router {
     await sendScheduleEvent(ctx.settings, {
       userId: user.id,
       clinicId: clinic.id,
-      reason: appointment.reason,
       eventTime: Math.floor(Date.now() / 1000),
     }).catch((err: unknown) =>
       ctx.logger.warn('conversion event failed', { userId: user.id, error: String(err) }),

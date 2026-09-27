@@ -18,6 +18,7 @@ export type BookingDoc = z.infer<typeof BookingDocSchema>;
 export type BookingsIndex = {
   add(doc: BookingDoc): void;
   search(userId: string, query: string): BookingDoc[];
+  removeByUserId(userId: string): void;
 };
 
 // Bookings search index, so patients can search their own bookings by clinic,
@@ -37,6 +38,10 @@ export function createBookingsIndex(file: string): BookingsIndex {
     add(doc) {
       const docs = load().filter((existing) => existing.appointmentId !== doc.appointmentId);
       docs.push(doc);
+      save(docs);
+    },
+    removeByUserId(userId) {
+      const docs = load().filter((doc) => doc.userId !== userId);
       save(docs);
     },
     search(userId, query) {

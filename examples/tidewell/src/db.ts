@@ -70,6 +70,7 @@ const CLINICS: Array<{ id: string; name: string; city: string; services: string[
 export function openDatabase(file: string): DatabaseSync {
   const db = new DatabaseSync(file);
   db.exec('PRAGMA foreign_keys = ON');
+  db.exec('PRAGMA secure_delete = ON');
   migrate(db);
   seedClinics(db);
   return db;

@@ -15,12 +15,14 @@ export function runRetentionJobs(ctx: AppContext, now: Date = new Date()): void 
 
   for (const { id } of expired) {
     transaction(ctx.db, () => {
+      run(ctx.db, 'DELETE FROM analytics_outbox WHERE payload_json LIKE ?', `%"userId":"${id}"%`);
       run(ctx.db, 'DELETE FROM payments WHERE user_id = ?', id);
       run(ctx.db, 'DELETE FROM appointments WHERE user_id = ?', id);
       run(ctx.db, 'DELETE FROM verification_codes WHERE user_id = ?', id);
       run(ctx.db, 'DELETE FROM sessions WHERE user_id = ?', id);
       run(ctx.db, 'DELETE FROM users WHERE id = ?', id);
     });
+    ctx.bookings.removeByUserId(id);
   }
 
   if (expired.length > 0) {
