@@ -137,3 +137,9 @@ body[data-page='site'] {
 .hero h1 .hl { white-space: nowrap; }
 .hero-window .doc-file { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
 .hero-window .rec { white-space: nowrap; }
+
+.nav-links { align-items: center; }
+.nav-links a { display: inline-flex; align-items: center; line-height: 1; height: 34px; }
+.nav-gh { gap: 8px; padding: 0 14px !important; background: #f0f2f5; color: #0b0d11 !important; border: 0 !important; border-radius: 8px !important; font-weight: 600; }
+.nav-gh:hover { background: #fff; }
+.hero-art { padding-bottom: 0; }

@@ -41,14 +41,9 @@ export function Landing() {
             <div className="doc-chrome">
               <span className="dot" /><span className="dot" /><span className="dot" />
               <span className="doc-file">IBM Bob · Fine Print Auditor mode</span>
-              <span className="rec">● real run</span>
             </div>
             <video className="hero-video" src="/media/hero-bob.mp4" poster="/media/hero-bob-poster.jpg" autoPlay muted loop playsInline />
           </figure>
-          <motion.figure className="hero-ledger" initial={{ opacity: 0, x: 24, y: 24 }} animate={{ opacity: 1, x: 0, y: 0 }} transition={{ delay: 0.9, duration: 0.7 }}>
-            <img src="/media/ledger-snippet.png" alt="The Tidewell privacy policy fact-checked: sections 3.2, 4.1 and 4.3 broken, 4.2 kept" />
-            <figcaption>The result: the policy, fact-checked</figcaption>
-          </motion.figure>
         </motion.div>
       </header>
 
