@@ -38,7 +38,6 @@ test('p-4-3-providers-only: personal data only to listed providers', async () =>
         'api.postmarkapp.com',
         'api.mailchimp.com',
         'api.stripe.com',
-        'graph.facebook.com',
       ],
     });
   } finally {

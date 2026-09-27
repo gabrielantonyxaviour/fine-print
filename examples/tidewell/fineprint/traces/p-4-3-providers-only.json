@@ -26,18 +26,6 @@
       "symbol": "subscribeMember"
     },
     {
-      "step": "Nightly job: sha256(phone) of all non-deleted users sent to graph.facebook.com via uploadPhoneAudience",
-      "file": "src/integrations/meta.ts",
-      "line": 41,
-      "symbol": "uploadPhoneAudience"
-    },
-    {
-      "step": "Booking: sha256(userId) sent to graph.facebook.com via sendScheduleEvent; no raw email/phone/name included",
-      "file": "src/integrations/meta.ts",
-      "line": 17,
-      "symbol": "sendScheduleEvent"
-    },
-    {
       "step": "Payment: card number sent to api.stripe.com via createPaymentMethod; no email/phone/name included",
       "file": "src/integrations/stripe.ts",
       "line": 26,
@@ -48,7 +36,6 @@
     "api.postmarkapp.com",
     "api.twilio.com",
     "api.mailchimp.com",
-    "graph.facebook.com",
     "api.stripe.com"
   ],
   "journeys": [
